@@ -1,3 +1,0 @@
-'''
-the poker game implementation
-'''
