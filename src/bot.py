@@ -28,4 +28,6 @@ async def on_connect():
 @client.event
 async def on_message(message):
     if message.content.startswith('!help'):
-        await client.send_message(message.channel, help_message)
+        await message.channel.send(help_message)
+
+client.run(TOKEN)
