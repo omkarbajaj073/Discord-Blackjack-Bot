@@ -14,6 +14,7 @@ while True:
             for card in cards:
                 deck.append(suits_values[suit]+card)
 
+
         playersum=0
         dealersum=0
         playerhand=[]
