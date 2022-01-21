@@ -61,16 +61,7 @@ class Game:
         card=random.choice(self.deck)
         self.deck.remove(card)
         self.playerhand.append(card)
-        if card[1:] != 'A':
-            self.playersum+=card_values[card[1:]]
-        else:
-            if self.playersum+11>21:
-                self.playersum+=1
-                self.playerhand.remove(card)
-                delf.playerhand.append(card[0]+'a')
-            else:
-                self.playersum+=11
-                
+        self.playersum+=card_values[card[1:]]        
         
         if self.playersum>21:
             self.check_aces_player()
