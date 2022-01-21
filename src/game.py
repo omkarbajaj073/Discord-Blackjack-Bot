@@ -34,7 +34,7 @@ class Game:
         
         if self.playersum==21 and self.dealersum==21:
             await self.show_hands()
-            await self.channel.send('Tie')
+            await self.channel.send('It was a tie.')
             self.reset_game()
             return
         elif self.playersum==21:
@@ -44,7 +44,7 @@ class Game:
             return
         elif self.dealersum==21:
             await self.show_hands()
-            await self.channel.send('You lost.')
+            await self.channel.send('You lost. Blackjack')
             self.reset_game()
             return
         
@@ -66,6 +66,8 @@ class Game:
         else:
             if self.playersum+11>21:
                 self.playersum+=1
+                self.playerhand.remove(card)
+                delf.playerhand.append(card[0]+'a')
             else:
                 self.playersum+=11
                 
@@ -89,8 +91,10 @@ class Game:
                 self.check_aces_dealer()
         
         await self.show_hands()
-        if self.dealersum<21:
+        if self.dealersum<21 and self.dealersum>self.playersum:
             await self.channel.send('The dealer won.')
+        elif self.dealersum==self.playersum:
+            await self.channel.send('It was a tie.')
         else:
             await self.channel.send('You won.')
         
