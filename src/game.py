@@ -69,11 +69,11 @@ class Game:
             else:
                 self.playersum+=11
                 
-        await self.show_hands(only_first=True)
         
         if self.playersum>21:
-            check_aces(self.playerhand, self.playersum)
-                    
+            self.check_aces_player()
+            
+        await self.show_hands(only_first=True)        
         if self.playersum>21:
             await self.channel.send('You lost.')
     
@@ -121,25 +121,11 @@ class Game:
     
     def check_aces_player(self):
         self.playerhand, self.playersum = check_aces(self.playerhand, self.playersum)
-        # for i in self.playerhand:
-        #     if i[1:]=='A':
-        #         self.playersum-=10
-        #         self.playerhand.remove(i)
-        #         self.playerhand.append(i[0]+'a')
-        #     if self.playersum <= 21:
-        #         break
     
     
     def check_aces_dealer(self):
-        self.dealerhand, self.dealerscore = check_aces(self.dealerhand, self.dealerscore)
-        # for i in self.dealerhand:
-        #     if i[1:]=='A':
-        #         self.dealersum-=10
-        #         self.dealerhand.remove(i)
-        #         self.dealerhand.append(i[0]+'a')
-        #     if self.dealersum <= 21:
-        #         break
-
+        self.dealerhand, self.dealersum = check_aces(self.dealerhand, self.dealersum)
+    
     
     def reset_game(self):
         self.dealerhand.clear()
