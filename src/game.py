@@ -1,5 +1,5 @@
 import random
-from constants import play_msg, card_values, get_deck
+from utils import play_msg, card_values, get_deck, check_aces
 
 class Game:
     
@@ -119,23 +119,25 @@ class Game:
         
     
     def check_aces_player(self):
-        for i in self.playerhand:
-            if i[1:]=='A':
-                self.playersum-=10
-                self.playerhand.remove(i)
-                self.playerhand.append(i[0]+'a')
-            if self.playersum <= 21:
-                break
+        self.playerhand, self.playerscore = check_aces(self.playerhand, self.playerscore)
+        # for i in self.playerhand:
+        #     if i[1:]=='A':
+        #         self.playersum-=10
+        #         self.playerhand.remove(i)
+        #         self.playerhand.append(i[0]+'a')
+        #     if self.playersum <= 21:
+        #         break
     
     
     def check_aces_dealer(self):
-        for i in self.dealerhand:
-            if i[1:]=='A':
-                self.dealersum-=10
-                self.dealerhand.remove(i)
-                self.dealerhand.append(i[0]+'a')
-            if self.dealersum <= 21:
-                break
+        self.dealerhand, self.dealerscore = check_aces(self.dealerhand, self.dealerscore)
+        # for i in self.dealerhand:
+        #     if i[1:]=='A':
+        #         self.dealersum-=10
+        #         self.dealerhand.remove(i)
+        #         self.dealerhand.append(i[0]+'a')
+        #     if self.dealersum <= 21:
+        #         break
 
     
     def reset_game(self):

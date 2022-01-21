@@ -2,3 +2,8 @@ Inherited from -
 
 https://github.com/samcoppini/Discord-Poker-Bot
 https://github.com/mitchellf/discord-blackjack-bot
+
+
+
+Potential bugs - 
+1. Checking aces - passing an attribute as an arg for an external function - what are the move semantics for that? Might mess up certain references.
