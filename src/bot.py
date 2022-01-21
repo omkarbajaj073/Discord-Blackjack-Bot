@@ -29,7 +29,7 @@ async def on_message(message):
                 await channel.send("You already have an active game " + name)
             else:
                 game.channel = channel
-                game.start_game()
+                await game.start_game()
         else:
             game = Game(channel, name)
             games[name] = game

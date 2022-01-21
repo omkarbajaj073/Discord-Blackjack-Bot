@@ -5,7 +5,7 @@ class Game:
     
     def __init__(self, channel = None, user = None):
         self.channel = channel
-        self.name = user.name
+        self.name = user
         self.active = False
         self.dealerhand = []
         self.dealersum = 0
@@ -37,19 +37,27 @@ class Game:
         if self.dealersum>21:
             self.check_aces_dealer()
             
-        await self.channel.send('Dealer - ', self.dealerhand[0], '\nPlayer - ', *self.playerhand)
+        msg = "Dealer - "
+        msg += self.dealerhand[0] + "\nPlayer - "
+        for card in self.playerhand:
+            msg += card + " "
+        msg += "\nPlayer Score - " + str(self.playersum)
+        await self.channel.send(msg)
         
         if self.playersum==21 and self.dealersum==21:
             await self.show_hands()
             await self.channel.send('tie')
+            self.reset_game()
             return
         elif self.playersum==21:
             await self.show_hands()
             await self.channel.send('You won! Blackjack')
+            self.reset_game()
             return
         elif self.dealersum==21:
             await self.show_hands()
             await self.channel.send('You lost.')
+            self.reset_game()
             return
         
         await self.channel.send(play_msg)
@@ -67,7 +75,7 @@ class Game:
             else:
                 self.playersum+=11
                 
-        await self.show_hands()
+        await self.show_hands(only_first=True)
         
         if self.playersum>21:
             for i in self.playerhand:
@@ -89,37 +97,39 @@ class Game:
             self.dealersum+=card_values[card[1:]]
             if self.dealersum>21:
                 self.check_aces_dealer()
-                
-        if self.dealersum<21:
-            await self.show_hands()
-            await self.channel.send('The dealer won.')
         
+        await self.show_hands()
+        if self.dealersum<21:
+            await self.channel.send('The dealer won.')
         else:
-            await self.show_hands()
             await self.channel.send('You won.')
         
         self.reset_game()
         
     
     async def surrender(self):
-        await self.channel.send('You surrendered ' + self.user.name)
+        await self.channel.send('You surrendered ' + self.name)
         self.reset_game()
         
     
-    async def show_hands(self):
+    async def show_hands(self, only_first = False):
         msg = "Dealer - "
-        for card in self.dealerhand:
-            msg += card + " "
-        msg += "\nDealer Score - " + str(self.dealerscore) + "\nPlayer - "
+        if only_first:
+            msg += self.dealerhand[0]
+        else:
+            for card in self.dealerhand:
+                msg += card + " "
+        if not only_first:
+            msg += "\nDealer Score - " + str(self.dealersum) + "\nPlayer - "
         for card in self.playerhand:
             msg += card + " "
-        msg += "\nPlayer Score - " + str(self.playerscore)
+        msg += "\nPlayer Score - " + str(self.playersum)
         
         await self.channel.send(msg)
         
     
     def check_aces_player(self):
-        self.playerhand, self.playerscore = check_aces(self.playerhand, self.playerscore)
+        self.playerhand, self.playersum = check_aces(self.playerhand, self.playersum)
         # for i in self.playerhand:
         #     if i[1:]=='A':
         #         self.playersum-=10
