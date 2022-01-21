@@ -41,16 +41,16 @@ while True:
                     playerhand.remove(i)
                     playerhand.append(i[0]+'a')
             
-        print('dealer - ',dealerhand[0],'\nplayer - ',playerhand)
+        print('dealer - ',dealerhand[0],'\nplayer - ',playerhand,'\nscore - ',playersum)
         
         if playersum==21 and dealersum==21:
-            print('dealer - ',dealerhand,'\nplayer - ',playerhand)
+            print('dealer - ',dealerhand,'\nplayer - ',playerhand,'\nscore - ',playersum)
             print('tie')
         elif playersum==21:
-            print('dealer - ',dealerhand,'\nplayer - ',playerhand)
+            print('dealer - ',dealerhand,'\nplayer - ',playerhand,'\nscore - ',playersum)
             print('You won! Blackjack')
         elif dealersum==21:
-            print('dealer - ',dealerhand,'\nplayer - ',playerhand)
+            print('dealer - ',dealerhand,'\nplayer - ',playerhand,'\nscore - ',playersum)
             print('You lost.')
         else:
             while True:
@@ -66,7 +66,7 @@ while True:
                             playersum+=1
                         else:
                             playersum+=11
-                    print('dealer - ',dealerhand,'\nplayer - ',playerhand)
+                    print('dealer - ',dealerhand,'\nplayer - ',playerhand,'\nscore - ',playersum)
                     
                     if playersum>21:
                         for i in playerhand:
@@ -94,11 +94,11 @@ while True:
                                     dealerhand.remove(i)
                                     dealerhand.append(i[0]+'a')
                     if dealersum<21:
-                        print('dealer - ',dealerhand,'\nplayer - ',playerhand)
+                        print('dealer - ',dealerhand,'\nplayer - ',playerhand,'\nscore - ',playersum)
                         print('You lost')
                         break
                     else:
-                        print('dealer - ',dealerhand,'\nplayer - ',playerhand)
+                        print('dealer - ',dealerhand,'\nplayer - ',playerhand,'\nscore - ',playersum)
                         print('You won')
                         break
             
