@@ -64,3 +64,6 @@ async def on_message(message):
                 await channel.send("You don't have an active game " + name)
         else:
             await channel.send("You don't have an active game " + name)
+            
+            
+client.run(TOKEN)
