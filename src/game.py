@@ -69,7 +69,7 @@ class Game:
         await self.show_hands(only_first=True)        
         if self.playersum>21:
             await self.channel.send('You lost.')
-    
+            self.reset_game()
     
     async def stay(self):
         
