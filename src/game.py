@@ -107,7 +107,15 @@ class Game:
         
     
     async def show_hands(self):
-        await self.channel.send('Dealer - ', *self.dealerhand, '\nPlayer - ', *self.playerhand)
+        msg = "Dealer - "
+        for card in self.dealerhand:
+            msg += card + " "
+        msg += "\nDealer Score - " + str(self.dealerscore) + "\nPlayer - "
+        for card in self.playerhand:
+            msg += card + " "
+        msg += "\nPlayer Score - " + str(self.playerscore)
+        
+        await self.channel.send(msg)
         
     
     def check_aces_player(self):
