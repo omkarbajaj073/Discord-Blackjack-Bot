@@ -66,6 +66,8 @@ class Game:
         else:
             if self.playersum+11>21:
                 self.playersum+=1
+                self.playerhand.remove(card)
+                delf.playerhand.append(card[0]+'a')
             else:
                 self.playersum+=11
                 
