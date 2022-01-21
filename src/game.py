@@ -31,22 +31,10 @@ class Game:
             self.playersum+=card_values[en[1:]]
         for en in self.dealerhand:
             self.dealersum+=card_values[en[1:]]
-
-        if self.playersum>21:
-            self.check_aces_player()
-        if self.dealersum>21:
-            self.check_aces_dealer()
-            
-        msg = "Dealer - "
-        msg += self.dealerhand[0] + "\nPlayer - "
-        for card in self.playerhand:
-            msg += card + " "
-        msg += "\nPlayer Score - " + str(self.playersum)
-        await self.channel.send(msg)
         
         if self.playersum==21 and self.dealersum==21:
             await self.show_hands()
-            await self.channel.send('tie')
+            await self.channel.send('Tie')
             self.reset_game()
             return
         elif self.playersum==21:
@@ -60,6 +48,12 @@ class Game:
             self.reset_game()
             return
         
+        msg = "Dealer - "
+        msg += self.dealerhand[0] + "\nPlayer - "
+        for card in self.playerhand:
+            msg += card + " "
+        msg += "\nPlayer Score - " + str(self.playersum)
+        await self.channel.send(msg)
         await self.channel.send(play_msg)
         
     
@@ -78,11 +72,7 @@ class Game:
         await self.show_hands(only_first=True)
         
         if self.playersum>21:
-            for i in self.playerhand:
-                if i[1:]=='A':
-                    self.playersum-=10
-                    self.playerhand.remove(i)
-                    self.playerhand.append(i[0]+'a')
+            check_aces(self.playerhand, self.playersum)
                     
         if self.playersum>21:
             await self.channel.send('You lost.')
@@ -118,11 +108,12 @@ class Game:
             msg += self.dealerhand[0]
         else:
             for card in self.dealerhand:
-                msg += card + " "
+                msg += card.upper() + " "
         if not only_first:
-            msg += "\nDealer Score - " + str(self.dealersum) + "\nPlayer - "
+            msg += "\nDealer Score - " + str(self.dealersum)
+        msg += "\nPlayer - "
         for card in self.playerhand:
-            msg += card + " "
+            msg += card.upper() + " "
         msg += "\nPlayer Score - " + str(self.playersum)
         
         await self.channel.send(msg)
