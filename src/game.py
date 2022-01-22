@@ -82,7 +82,7 @@ class Game:
                 self.check_aces_dealer()
         
         await self.show_hands()
-        if self.dealersum<21 and self.dealersum>self.playersum:
+        if self.dealersum<=21 and self.dealersum>self.playersum:
             await self.channel.send('The dealer won.')
         elif self.dealersum==self.playersum:
             await self.channel.send('It was a tie.')
