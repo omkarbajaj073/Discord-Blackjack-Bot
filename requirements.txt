@@ -1,4 +1,2 @@
 Python modules:
 - discord.py
-- firebase_admin # or could just use a local json file
-- pydealer - https://pydealer.readthedocs.io/en/latest/

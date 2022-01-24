@@ -1,5 +1,6 @@
 import discord
 from game import Game
+from utils import play_msg
 
 
 games = {}
@@ -39,7 +40,7 @@ async def on_message(message):
         if name in games:
             game = games[name]
             if game.active:
-                await game.hit()
+                await game.hit(game.cur)
             else:
                 await channel.send("You don't have an active game " + name)
         else:
@@ -60,6 +61,27 @@ async def on_message(message):
             game = games[name]
             if game.active:
                 await game.surrender()
+            else:
+                await channel.send("You don't have an active game " + name)
+        else:
+            await channel.send("You don't have an active game " + name)
+            
+    elif content == "!split":
+        if name in games:
+            game = games[name]
+            if game.active:
+                await game.split()
+            else:
+                await channel.send("You don't have an active game " + name)
+        else:
+            await channel.send("You don't have an active game " + name)
+            
+    elif content == "!continue":
+        if name in games:
+            game = games[name]
+            if game.active:
+                game.can_split = False
+                await channel.send("Continuing game with no split\n" + play_msg)
             else:
                 await channel.send("You don't have an active game " + name)
         else:
