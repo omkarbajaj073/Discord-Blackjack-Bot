@@ -127,7 +127,8 @@ class Game:
         await self.show_hands(only_first=True)   
         if self.active_hands == 2:
             self.cur = (self.cur % 2) + 1
-        await self.channel.send("Play for Hand " + str(self.cur))
+        if self.has_split:
+            await self.channel.send("Play for Hand " + str(self.cur))
     
     async def stay(self):
         
