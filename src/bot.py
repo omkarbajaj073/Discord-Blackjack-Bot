@@ -1,13 +1,15 @@
 import discord
 from game import Game
 from utils import play_msg
+from dotenv import load_dotenv
+import os
 
+
+load_dotenv()
+TOKEN = os.getenv('TOKEN')
 
 games = {}
-
-
 client = discord.Client()
-TOKEN = "OTEwMTkxOTY4NDMxMjQ3NDQw.YZPQUw.8lobqubSVdeeVL9OCWeL5BhKjfE"
 
 @client.event
 async def on_connect():
@@ -87,5 +89,5 @@ async def on_message(message):
         else:
             await channel.send("You don't have an active game " + name)
             
-            
+# TOKEN = os.getenv("TOKEN")
 client.run(TOKEN)
