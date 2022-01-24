@@ -242,3 +242,4 @@ class Game:
             self.active_hands = 1
             self.can_split = 0
             self.has_split = 0
+            self.can_surrender = True
