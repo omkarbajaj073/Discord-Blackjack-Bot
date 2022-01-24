@@ -1,4 +1,0 @@
-Inherited from - 
-
-https://github.com/samcoppini/Discord-Poker-Bot
-https://github.com/mitchellf/discord-blackjack-bot
