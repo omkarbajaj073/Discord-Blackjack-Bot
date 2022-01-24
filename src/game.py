@@ -22,14 +22,14 @@ class Game:
     async def start_game(self):
         
         self.active = True
-        # for _ in range(2):
-        #     playercard = random.choice(self.deck)
-        #     self.playerhand.append(playercard)
-        #     self.deck.remove(playercard)
-        self.deck.remove('♥K')
-        self.deck.remove('♦K')
-        self.playerhand.append('♥K')
-        self.playerhand.append('♦K')
+        for _ in range(2):
+            playercard = random.choice(self.deck)
+            self.playerhand.append(playercard)
+            self.deck.remove(playercard)
+        # self.deck.remove('♥K')
+        # self.deck.remove('♦K')
+        # self.playerhand.append('♥K')
+        # self.playerhand.append('♦K')
             
         for _ in range(2):
             dealercard = random.choice(self.deck)
