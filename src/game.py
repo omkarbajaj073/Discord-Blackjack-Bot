@@ -160,16 +160,16 @@ class Game:
                 else:
                     for i in range(1, 3):
                         if self.dealersum > self.playersum[i] or self.playersum[i] > 21:
-                            await self.channel.send("Hand " + str(i+1) + " lost.")
+                            await self.channel.send("Hand " + str(i) + " lost.")
                         else:
-                            await self.channel.send("Hand " + str(i+1) + " tied.")
+                            await self.channel.send("Hand " + str(i) + " tied.")
             else:
                 if self.has_split:
                     for i in range(1, 3):
                         if self.playersum[i] > 21:
-                            await self.channel.send("Hand " + str(i+1) + " lost.")
+                            await self.channel.send("Hand " + str(i) + " lost.")
                         else:
-                            await self.channel.send("Hand " + str(i+1) + " won.")
+                            await self.channel.send("Hand " + str(i) + " won.")
                 else:
                     await self.channel.send("You won.")
         
@@ -242,3 +242,4 @@ class Game:
             self.active_hands = 1
             self.can_split = 0
             self.has_split = 0
+            self.can_surrender = True
