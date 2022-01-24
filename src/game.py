@@ -149,7 +149,7 @@ class Game:
                 if self.dealersum>21:
                     self.check_aces_dealer()
                     
-            if self.dealersum<=21:
+            if self.dealersum<=21 and self.dealersum!=sm:
                 msg = 'The dealer won'
                 if self.has_split:
                     msg += ' on both hands'
