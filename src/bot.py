@@ -4,7 +4,6 @@ from game import Game
 
 games = {}
 
-
 client = discord.Client()
 TOKEN = "OTEwMTkxOTY4NDMxMjQ3NDQw.YZPQUw.8lobqubSVdeeVL9OCWeL5BhKjfE"
 
@@ -23,17 +22,23 @@ async def on_message(message):
     
     if content == "!bj":
         await channel.send("Starting blackjack with " + name)
-        if name in games:
-            game = games[name]
+        if channel in games:
+            game = games[channel]
             if game.active:
-                await channel.send("You already have an active game " + name)
+                await channel.send("This channel already has an active game.")
             else:
-                game.channel = channel
+                game.players.append(name)
                 await game.start_game()
         else:
-            game = Game(channel, name)
-            games[name] = game
+            game = Game(channel, [name])
+            games[channel] = game
             await game.start_game()
+            
+    elif content == "!join":
+        if channel in games and games[channel].active:
+            games[channel].add_player(name)
+        else:
+            await channel.send("There is no active game in this channel.")
             
     elif content == "!hit":
         if name in games:
