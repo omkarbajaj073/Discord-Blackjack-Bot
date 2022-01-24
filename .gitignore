@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 # self files - 
-.txt
+notes.txt
+temp.txt
