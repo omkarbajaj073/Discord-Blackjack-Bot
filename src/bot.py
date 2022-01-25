@@ -1,9 +1,7 @@
 import discord
 from game import Game
-from utils import play_msg
 from dotenv import load_dotenv
 import os
-
 
 load_dotenv()
 TOKEN = os.getenv('TOKEN')

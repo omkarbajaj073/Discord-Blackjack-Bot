@@ -107,8 +107,8 @@ class Game:
             if self.playersum>21:
                 self.check_aces_player()    
             if self.playersum>21:
-                await self.channel.send('You lost.')
                 await self.show_hands()
+                await self.channel.send('You lost.')
                 self.reset_game()
                 return
                  
