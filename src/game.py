@@ -87,6 +87,12 @@ class Game:
 
         else:
             await self.channel.send("You can't split at this stage of the game.")
+            
+            
+    async def cont(self):
+        self.can_split = False
+        await self.show_hands(only_first=True)
+        await self.channel.send("Continuing game with no split\n" + play_msg)
         
     
     async def hit(self, hand=None):

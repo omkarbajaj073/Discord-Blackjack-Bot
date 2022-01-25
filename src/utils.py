@@ -1,6 +1,6 @@
 play_msg = "Game started.\n!hit - Hit me.\n!stay - Stay.\n!surrender - Surrender."
 help_msg = ""
-split_msg = "Do you want to split? (y/n)\n!split - Split.\n!continue - Continue without split\n!hit - Hit me.\n!stay - Stay.\n!surrender - Surrender."
+split_msg = "Do you want to split? (y/n)\n!split - Split.\n!continue - Continue without split\n"
 card_values = {"A": 11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8,
                 "9":9, "10":10, "J":10, "Q":10, "K":10}
 
