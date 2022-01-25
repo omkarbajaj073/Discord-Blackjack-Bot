@@ -1,7 +1,7 @@
 import discord
 from game import Game
 from dotenv import load_dotenv
-from utils import default_bet
+from utils import default_bet, help_msg
 import os
 
 load_dotenv()
@@ -105,6 +105,9 @@ async def on_message(message):
         
     elif content == "!balance":
         await balance(name, channel)
+        
+    elif content == "!help":
+        await channel.send(help_msg)
         
             
 
