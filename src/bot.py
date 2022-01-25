@@ -1,6 +1,7 @@
 import discord
 from game import Game
 from dotenv import load_dotenv
+from utils import default_bet
 import os
 
 load_dotenv()
@@ -43,6 +44,13 @@ async def split(game):
 @commands
 async def cont(game):
     await game.cont()
+
+async def balance(name, channel):
+    if name in games:
+        game = games[name]
+        await channel.send(f"{name} has a balance of {game.balance}")
+    else:
+        await channel.send(f"{name} has never played a game on this server.")
     
     
 @client.event
@@ -60,18 +68,26 @@ async def on_message(message):
     
     if content == "!bj":
         await channel.send("Starting blackjack with " + name)
+        com = content.split()
+        if len(com) == 2:
+            bet = com[1]
+        else:
+            bet = default_bet
         if name in games:
             game = games[name]
             if game.active:
                 await channel.send("You already have an active game " + name)
             else:
                 game.channel = channel
-                await game.start_game()
         else:
             game = Game(channel, name)
             games[name] = game
-            await game.start_game()
-            
+            await channel.send("Creating BJ account - starting balance is 10000.")
+        if game.balance < bet:
+            await channel.send("Sorry, you don't have enough money to bet " + str(bet))
+        else:
+            await game.start_game(bet)        
+                    
     elif content == "!hit":
         await hit(name, channel)
             
@@ -86,6 +102,10 @@ async def on_message(message):
             
     elif content == "!continue":
         await cont(name, channel)
+        
+    elif content == "!balance":
+        await balance(name, channel)
+        
             
 
 client.run(TOKEN)

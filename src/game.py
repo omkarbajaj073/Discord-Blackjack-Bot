@@ -1,5 +1,5 @@
 import random
-from utils import play_msg, card_values, get_deck, check_aces, split_msg
+from utils import play_msg, card_values, get_deck, check_aces, split_msg, default_bet
 
 class Game:
     
@@ -17,19 +17,18 @@ class Game:
         self.active_hands = 1
         self.cur = None
         self.can_surrender = True
+        self.balance = 10000
+        self.bet = 0
+        self.change = 0
     
     
-    async def start_game(self):
-        
+    async def start_game(self, bet=default_bet):
+        self.bet = bet
         self.active = True
         for _ in range(2):
             playercard = random.choice(self.deck)
             self.playerhand.append(playercard)
             self.deck.remove(playercard)
-        # self.deck.remove('♥K')
-        # self.deck.remove('♦K')
-        # self.playerhand.append('♥K')
-        # self.playerhand.append('♦K')
             
         for _ in range(2):
             dealercard = random.choice(self.deck)
@@ -44,17 +43,17 @@ class Game:
         if self.playersum==21 and self.dealersum==21:
             await self.show_hands()
             await self.channel.send('It was a tie.')
-            self.reset_game()
+            await self.reset_game()
             return
         elif self.playersum==21:
             await self.show_hands()
             await self.channel.send('You won! Blackjack')
-            self.reset_game()
+            await self.reset_game()
             return
         elif self.dealersum==21:
             await self.show_hands()
             await self.channel.send('You lost. Blackjack')
-            self.reset_game()
+            await self.reset_game()
             return
         
         await self.show_hands(only_first = True)
@@ -107,9 +106,9 @@ class Game:
             if self.playersum>21:
                 self.check_aces_player()    
             if self.playersum>21:
+                self.change -= self.bet
                 await self.show_hands()
-                await self.channel.send('You lost.')
-                self.reset_game()
+                await self.reset_game()
                 return
                  
         else:
@@ -122,7 +121,7 @@ class Game:
                 
                 if self.active_hands == 0:
                     await self.stay()
-                    self.reset_game()
+                    await self.reset_game()
                     return
                     
                 await self.channel.send('You lost on Hand ' + str(hand+1))
@@ -138,6 +137,7 @@ class Game:
     
     async def stay(self):
         
+        self.change = 0
         self.active_hands -= 1
         self.can_surrender = False
         if self.active_hands <= 0:
@@ -155,11 +155,13 @@ class Game:
                 if self.dealersum>21:
                     self.check_aces_dealer()
                     
-            if self.dealersum<=21 and self.dealersum!=sm:
+            if self.dealersum<=21 and self.dealersum>sm:
                 msg = 'The dealer won'
                 if self.has_split:
                     msg += ' on both hands'
+                    self.change -= self.bet
                 await self.channel.send(msg)
+                self.change -= self.bet
             elif self.dealersum==sm:
                 if not self.has_split:
                     await self.channel.send('It was a tie.')
@@ -167,6 +169,7 @@ class Game:
                     for i in range(1, 3):
                         if self.dealersum > self.playersum[i] or self.playersum[i] > 21:
                             await self.channel.send("Hand " + str(i) + " lost.")
+                            self.change -= self.bet
                         else:
                             await self.channel.send("Hand " + str(i) + " tied.")
             else:
@@ -174,13 +177,16 @@ class Game:
                     for i in range(1, 3):
                         if self.playersum[i] > 21:
                             await self.channel.send("Hand " + str(i) + " lost.")
+                            self.change -= self.bet
                         else:
                             await self.channel.send("Hand " + str(i) + " won.")
+                            self.change -= self.bet
                 else:
                     await self.channel.send("You won.")
+                    self.change += self.bet
         
             await self.show_hands()
-            self.reset_game()
+            await self.reset_game()
 
         else:
             self.cur = (self.cur % 2) + 1
@@ -190,7 +196,8 @@ class Game:
     async def surrender(self):
         if self.can_surrender:
             await self.channel.send('You surrendered ' + self.name)
-            self.reset_game()
+            self.balance -= self.bet
+            await self.reset_game()
         else:
             await self.channel.send("You can't surrender at this stage in the game.")
         
@@ -234,18 +241,26 @@ class Game:
         self.dealerhand, self.dealersum = check_aces(self.dealerhand, self.dealersum)
     
     
-    def reset_game(self, hand=None):
-        if self.active_hands and hand is not None:
-            self.playerhand[hand].clear()
-            self.playersum[hand] = 0
-        else:    
-            self.dealerhand.clear()
-            self.dealersum = 0
-            self.playerhand = []
-            self.playersum = 0
-            self.deck = get_deck()
-            self.active = False
-            self.active_hands = 1
-            self.can_split = 0
-            self.has_split = 0
-            self.can_surrender = True
+    async def reset_game(self):
+        self.balance += self.change
+        if self.change < 0:
+            self.change *= (-1)
+            await self.channel.send(f"You lost {self.change} coins")
+        elif self.change == 0:
+            await self.channel.send("You gained and lost nothing.")
+        else:
+            await self.channel.send(f"You won {self.change} coins")
+        await self.channel.send("Your current balance is " + str(self.balance))
+        
+        self.dealerhand.clear()
+        self.dealersum = 0
+        self.playerhand = []
+        self.playersum = 0
+        self.deck = get_deck()
+        self.active = False
+        self.active_hands = 1
+        self.can_split = 0
+        self.has_split = 0
+        self.can_surrender = True
+        self.bet = 0
+        self.change = 0
