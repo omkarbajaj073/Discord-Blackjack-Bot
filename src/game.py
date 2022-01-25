@@ -48,11 +48,13 @@ class Game:
         elif self.playersum==21:
             await self.show_hands()
             await self.channel.send('You won! Blackjack')
+            self.change += self.bet
             await self.reset_game()
             return
         elif self.dealersum==21:
             await self.show_hands()
             await self.channel.send('You lost. Blackjack')
+            self.change -= self.bet
             await self.reset_game()
             return
         
@@ -84,7 +86,7 @@ class Game:
             }
             self.playersum = {
                 1: val + card_values[card3[1:]], 
-                2: val + card_values[card3[1:]]
+                2: val + card_values[card4[1:]]
             }
             self.active_hands = 2
             self.cur = 1
@@ -176,19 +178,19 @@ class Game:
                 else:
                     for i in range(1, 3):
                         if self.dealersum > self.playersum[i] or self.playersum[i] > 21:
-                            await self.channel.send("Hand " + str(i) + " lost.")
+                            await self.channel.send(f"Hand {i} lost.")
                             self.change -= self.bet
                         else:
-                            await self.channel.send("Hand " + str(i) + " tied.")
+                            await self.channel.send(f"Hand {i} tied.")
             else:
                 if self.has_split:
                     for i in range(1, 3):
                         if self.playersum[i] > 21:
-                            await self.channel.send("Hand " + str(i) + " lost.")
+                            await self.channel.send(f"Hand {i} lost.")
                             self.change -= self.bet
                         else:
-                            await self.channel.send("Hand " + str(i) + " won.")
-                            self.change -= self.bet
+                            await self.channel.send(f"Hand {i} won.")
+                            self.change += self.bet
                 else:
                     await self.channel.send("You won.")
                     self.change += self.bet
@@ -198,13 +200,13 @@ class Game:
 
         else:
             self.cur = (self.cur % 2) + 1
-            await self.channel.send("Play for Hand " + str(self.cur))
+            await self.channel.send(f"Play for Hand {self.cur}")
             
             
     async def surrender(self):
         if self.can_surrender:
-            await self.channel.send('You surrendered ' + self.name)
-            self.balance -= self.bet
+            await self.channel.send(f'You surrendered {self.name}')
+            self.change -= self.bet
             await self.reset_game()
         else:
             await self.channel.send("You can't surrender at this stage in the game.")

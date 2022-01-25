@@ -66,11 +66,11 @@ async def on_message(message):
     if message.author == client.user:
         return   
     
-    if content == "!bj":
-        await channel.send("Starting blackjack with " + name)
+    if content.startswith("!bj"):
+        await channel.send(f"Starting blackjack with {name}.")
         com = content.split()
         if len(com) == 2:
-            bet = com[1]
+            bet = int(com[1])
         else:
             bet = default_bet
         if name in games:
@@ -82,9 +82,9 @@ async def on_message(message):
         else:
             game = Game(channel, name)
             games[name] = game
-            await channel.send("Creating BJ account - starting balance is 10000.")
+            await channel.send("Creating BJ account - starting balance is 10000 coins.")
         if game.balance < bet:
-            await channel.send("Sorry, you don't have enough money to bet " + str(bet))
+            await channel.send(f"Sorry, you don't have enough money to bet {bet} coins")
         else:
             await game.start_game(bet)        
                     
