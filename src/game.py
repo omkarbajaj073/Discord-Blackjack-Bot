@@ -59,9 +59,9 @@ class Game:
         
         await self.show_hands(only_first = True)
         
-        if self.playerhand[0][1:] == self.playerhand[1][1:]:
+        if card_values[self.playerhand[0][1:]] == card_values[self.playerhand[1][1:]]:
             await self.channel.send(split_msg)
-            self.can_split = 1
+            self.can_split = True
         else:
             await self.channel.send(play_msg)
         
@@ -155,7 +155,7 @@ class Game:
                 if self.dealersum>21:
                     self.check_aces_dealer()
                     
-            if self.dealersum<=21:
+            if self.dealersum<=21 and self.dealersum!=sm:
                 msg = 'The dealer won'
                 if self.has_split:
                     msg += ' on both hands'
