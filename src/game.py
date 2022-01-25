@@ -1,3 +1,4 @@
+import discord
 import random
 from utils import play_msg, card_values, get_deck, check_aces, split_msg, default_bet
 
@@ -25,12 +26,12 @@ class Game:
     async def start_game(self, bet=default_bet):
         self.bet = bet
         self.active = True
-        for _ in range(2):
+        for i in range(2):
             playercard = random.choice(self.deck)
             self.playerhand.append(playercard)
             self.deck.remove(playercard)
             
-        for _ in range(2):
+        for i in range(2):
             dealercard = random.choice(self.deck)
             self.dealerhand.append(dealercard)
             self.deck.remove(dealercard)
@@ -42,18 +43,19 @@ class Game:
         
         if self.playersum==21 and self.dealersum==21:
             await self.show_hands()
-            await self.channel.send('It was a tie.')
+            await self.channel.send('**It was a tie!**')
             await self.reset_game()
             return
         elif self.playersum==21:
             await self.show_hands()
             await self.channel.send('You won! Blackjack')
+            await self.channel.send('**You won! Blackjack**')
             self.change += self.bet*3/2
             await self.reset_game()
             return
         elif self.dealersum==21:
             await self.show_hands()
-            await self.channel.send('You lost. Blackjack')
+            await self.channel.send('**You lost! Blackjack**')
             self.change -= self.bet
             await self.reset_game()
             return
@@ -64,7 +66,7 @@ class Game:
             await self.channel.send(split_msg)
             self.can_split = True
         else:
-            await self.channel.send(play_msg)
+            await self.channel.send(embed=play_msg)
         
         
     async def split(self):
@@ -90,17 +92,17 @@ class Game:
             }
             self.active_hands = 2
             self.cur = 1
-            await self.channel.send("Split complete\n" + play_msg + "\nPlay for Hand 1.")
+            await self.channel.send("**Split complete!\n**" + play_msg + "\nPlay for Hand 1.")
             await self.show_hands(only_first=True)
 
         else:
-            await self.channel.send("You can't split at this stage of the game.")
+            await self.channel.send("**You can't split at this stage of the game.**")
             
             
     async def cont(self):
         self.can_split = False
         await self.show_hands(only_first=True)
-        await self.channel.send("Continuing game with no split\n" + play_msg)
+        await self.channel.send("**Continuing game with no split\n**" + play_msg)
         
     
     async def hit(self, hand=None):
@@ -116,6 +118,7 @@ class Game:
                 self.check_aces_player()    
             if self.playersum>21:
                 self.change -= self.bet
+                await self.channel.send('**You went over 21. You lost!**')
                 await self.show_hands()
                 await self.reset_game()
                 return
@@ -133,7 +136,7 @@ class Game:
                     await self.reset_game()
                     return
                     
-                await self.channel.send('You lost on Hand ' + str(hand+1))
+                await self.channel.send('**You lost on Hand**' + str(hand+1))
                 await self.show_hands(only_first=True)
                 self.cur = (self.cur % 2) + 1    
                 return             
@@ -142,7 +145,7 @@ class Game:
         if self.active_hands == 2:
             self.cur = (self.cur % 2) + 1
         if self.has_split:
-            await self.channel.send("Play for Hand " + str(self.cur))
+            await self.channel.send("Play for Hand" + str(self.cur))
     
 
     async def stay(self):
@@ -166,33 +169,33 @@ class Game:
                     self.check_aces_dealer()
                     
             if self.dealersum<=21 and self.dealersum>sm:
-                msg = 'The dealer won'
+                msg = '**The dealer won!**'
                 if self.has_split:
-                    msg += ' on both hands'
+                    msg += '** On both hands!**'
                     self.change -= self.bet
                 await self.channel.send(msg)
                 self.change -= self.bet
             elif self.dealersum==sm:
                 if not self.has_split:
-                    await self.channel.send('It was a tie.')
+                    await self.channel.send('**It was a tie!**')
                 else:
                     for i in range(1, 3):
                         if self.dealersum > self.playersum[i] or self.playersum[i] > 21:
-                            await self.channel.send(f"Hand {i} lost.")
+                            await self.channel.send(f"**Hand {i} lost!**")
                             self.change -= self.bet
                         else:
-                            await self.channel.send(f"Hand {i} tied.")
+                            await self.channel.send(f"**Hand {i} tied!**")
             else:
                 if self.has_split:
                     for i in range(1, 3):
                         if self.playersum[i] > 21:
-                            await self.channel.send(f"Hand {i} lost.")
+                            await self.channel.send(f"**Hand {i} lost!**")
                             self.change -= self.bet
                         else:
-                            await self.channel.send(f"Hand {i} won.")
+                            await self.channel.send(f"**Hand {i} won!**")
                             self.change += self.bet
                 else:
-                    await self.channel.send("You won.")
+                    await self.channel.send('**You won!**')
                     self.change += self.bet
         
             await self.show_hands()
@@ -205,15 +208,16 @@ class Game:
             
     async def surrender(self):
         if self.can_surrender:
-            await self.channel.send(f'You surrendered {self.name}')
+            await self.channel.send(f'**You surrendered {self.name}.**')
+            await self.show_hands()
             self.change -= self.bet/2
             await self.reset_game()
         else:
-            await self.channel.send("You can't surrender at this stage in the game.")
+            await self.channel.send("**You can't surrender at this stage in the game.**")
         
     
     async def show_hands(self, only_first = False):
-        msg = "Dealer - "
+        msg = "**Dealer - **"
         if only_first:
             msg += self.dealerhand[0]
         else:
@@ -223,21 +227,21 @@ class Game:
             msg += "\nDealer Score - " + str(self.dealersum)
         
         if self.has_split:
-            msg += "\nPlayer - Hand 1: "
+            msg += "**\nPlayer - Hand 1: **"
             for card in self.playerhand[1]:
                 msg += card.upper() + " "
             msg += "\nScore on Hand 1 - " + str(self.playersum[1])
-            msg += "\nPlayer - Hand 2: "
+            msg += "**\nPlayer - Hand 2: **"
             for card in self.playerhand[2]:
                 msg += card.upper() + " "
             msg += "\nScore on Hand 2 - " + str(self.playersum[2])
         else:
-            msg += "\nPlayer - "
+            msg += "**\nPlayer - **"
             for card in self.playerhand:
                 msg += card.upper() + " "
             msg += "\nPlayer Score - " + str(self.playersum)
-        
-        await self.channel.send(msg)
+        embed=discord.Embed(title=self.name,description=msg,color=discord.Color.red())
+        await self.channel.send(embed=embed)
         
     
     def check_aces_player(self, hand=None):

@@ -107,7 +107,7 @@ async def on_message(message):
         await balance(name, channel)
         
     elif content == "!help":
-        await channel.send(help_msg)
+        await channel.send(embed=help_msg)
         
             
 
