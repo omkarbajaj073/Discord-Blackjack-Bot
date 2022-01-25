@@ -72,13 +72,20 @@ class Game:
             self.can_split = False
             card1 = self.playerhand[0]
             card2 = self.playerhand[1]
+            card3 = random.choice(self.deck)
+            card4 = random.choice(self.deck)
+            self.deck.remove(card3)
+            self.deck.remove(card4)
             val = card_values[card1[1:]]
             self.playerhand.clear()
             self.playerhand = {
-                1: [card1],
-                2: [card2]                
+                1: [card1, card3],
+                2: [card2, card4]                
             }
-            self.playersum = {1: val, 2: val}
+            self.playersum = {
+                1: val + card_values[card3[1:]], 
+                2: val + card_values[card3[1:]]
+            }
             self.active_hands = 2
             self.cur = 1
             await self.channel.send("Split complete\n" + play_msg + "\nPlay for Hand 1.")
@@ -135,6 +142,7 @@ class Game:
         if self.has_split:
             await self.channel.send("Play for Hand " + str(self.cur))
     
+
     async def stay(self):
         
         self.change = 0
