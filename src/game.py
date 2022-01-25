@@ -48,7 +48,7 @@ class Game:
         elif self.playersum==21:
             await self.show_hands()
             await self.channel.send('You won! Blackjack')
-            self.change += self.bet
+            self.change += self.bet*3/2
             await self.reset_game()
             return
         elif self.dealersum==21:
@@ -206,7 +206,7 @@ class Game:
     async def surrender(self):
         if self.can_surrender:
             await self.channel.send(f'You surrendered {self.name}')
-            self.change -= self.bet
+            self.change -= self.bet/2
             await self.reset_game()
         else:
             await self.channel.send("You can't surrender at this stage in the game.")
