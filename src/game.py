@@ -92,9 +92,10 @@ class Game:
             }
             self.active_hands = 2
             self.cur = 1
-            await self.channel.send("**Split complete!**\nPlay for Hand 1.")
+            await self.channel.send("**Split complete!**")
             await self.show_hands(only_first=True)
             await self.channel.send(embed=play_msg)
+            await self.channel.send("Play for Hand 1")
 
         else:
             await self.channel.send("**You can't split at this stage of the game.**")
@@ -103,9 +104,9 @@ class Game:
     async def cont(self):
         self.can_split = False
         await self.show_hands(only_first=True)
-        await self.channel.send("**Continuing game with no split\n**" + play_msg)
+        await self.channel.send("**Continuing game with no split\n**")
+        await self.channel.send(embed=play_msg)
         
-    
     async def hit(self, hand=None):
         
         self.can_surrender = False
