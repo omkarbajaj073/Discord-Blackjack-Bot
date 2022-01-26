@@ -21,7 +21,8 @@ help_msg1 = '''**Commands**
 8. The dealer has the authority to decide whether to hit or stand.
 9. The player has an option to use split, given that he has two cards of same value in the hand
 10. If the player decides to split, he gets two hands and plays for these hands seperately.
-11. According to the final sum of the cards, the winner is decided.'''
+11. According to the final sum of the cards, the winner is decided.
+12. Default bet is 500 coins. You can set any custom amount of bet by adding the number after !bj. '''
 
 help_msg = discord.Embed(title='',description=help_msg1,color=discord.Color.red())
 split_msg1 = "**Do you want to split?**\n!split - Split.\n!continue - Continue without split\n"
