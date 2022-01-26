@@ -25,6 +25,23 @@ def commands(func):
     return wrapper
 
 
+async def start_game(name, channel, bet=default_bet):
+    if name in games:
+        game = games[name]
+        if game.active:
+            await channel.send("You already have an active game " + name)
+            return
+        else:
+            game.channel = channel
+    else:
+        game = Game(channel, name)
+        games[name] = game
+        await channel.send("Creating BJ account - starting balance is 10000 coins.")
+    if game.balance < bet:
+        await channel.send(f"Sorry, you don't have enough money to bet {bet} coins")
+    else:
+        await game.start_game(bet)  
+
 @commands
 async def hit(game):
     await game.hit(game.cur)
@@ -73,20 +90,8 @@ async def on_message(message):
             bet = int(com[1])
         else:
             bet = default_bet
-        if name in games:
-            game = games[name]
-            if game.active:
-                await channel.send("You already have an active game " + name)
-            else:
-                game.channel = channel
-        else:
-            game = Game(channel, name)
-            games[name] = game
-            await channel.send("Creating BJ account - starting balance is 10000 coins.")
-        if game.balance < bet:
-            await channel.send(f"Sorry, you don't have enough money to bet {bet} coins")
-        else:
-            await game.start_game(bet)        
+            
+        await start_game(name, channel, bet)
                     
     elif content == "!hit":
         await hit(name, channel)

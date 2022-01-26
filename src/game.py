@@ -63,7 +63,7 @@ class Game:
         await self.show_hands(only_first = True)
         
         if card_values[self.playerhand[0][1:]] == card_values[self.playerhand[1][1:]]:
-            await self.channel.send(split_msg)
+            await self.channel.send(embed=split_msg)
             self.can_split = True
         else:
             await self.channel.send(embed=play_msg)
@@ -92,8 +92,9 @@ class Game:
             }
             self.active_hands = 2
             self.cur = 1
-            await self.channel.send("**Split complete!\n**" + play_msg + "\nPlay for Hand 1.")
+            await self.channel.send("**Split complete!**\nPlay for Hand 1.")
             await self.show_hands(only_first=True)
+            await self.channel.send(embed=play_msg)
 
         else:
             await self.channel.send("**You can't split at this stage of the game.**")
