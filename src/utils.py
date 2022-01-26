@@ -1,26 +1,28 @@
 import discord
 play_msg1 = "!hit - Hit me. Ask for another card.\n!stay - Stay.\n!surrender - Surrender."
 play_msg = discord.Embed(title='',description=play_msg1,color=discord.Color.red()) 
-help_msg1 = "**Commands** \n
-!bj: Starts a new game with the player. \n
-!hit: draw a card \n
-!stay: dealer draws cards \n
-!split: you gets two hands and play seperately for each hand \n
-!continue: in case you do not want to split \n
-!surrender: give up the match \n
-!help: to see rules and commands \n\n
-**Rules** \n
-1. A card is dealt to the player facing upwards (visible to everyone). \n
-2. The dealer deals a card to himself visible to everyone. \n
-3. Another card is given to the player facing upwards. \n
-4. The dealer deals a card facing downwards for himself. \n
-5. The player has to decide whether to hit, stay, split (certain cases) or surrender \n
-6. If the player decides to hit, another card is dealt. \n
-7. If the player decides to stand, then the dealer reveals his hidden card. \n
-8. The dealer has the authority to decide whether to hit or stand. \n
-9. The player has an option to use split, given that he has two cards of same value in the hand.\n
-10. If the player decides to split, he gets two hands and plays for these hands seperately. \n
-11. According to the final sum of the cards, the winner is decided.\n"
+help_msg1 = '''**Commands**
+!bj: Starts a new game with the player.
+!hit: draw a card
+!stay: dealer draws cards
+!split: you gets two hands and play seperately for each hand
+!continue: in case you do not want to split
+!surrender: give up the match
+!help: to see rules and commands
+
+**Rules**
+1. A card is dealt to the player facing upwards (visible to everyone).
+2. The dealer deals a card to himself visible to everyone. 
+3. Another card is given to the player facing upwards.
+4. The dealer deals a card facing downwards for himself.
+5. The player has to decide whether to hit, stay, split (certain cases) or surrender
+6. If the player decides to hit, another card is dealt.
+7. If the player decides to stand, then the dealer reveals his hidden card.
+8. The dealer has the authority to decide whether to hit or stand.
+9. The player has an option to use split, given that he has two cards of same value in the hand
+10. If the player decides to split, he gets two hands and plays for these hands seperately.
+11. According to the final sum of the cards, the winner is decided.'''
+
 help_msg = discord.Embed(title='',description=help_msg1,color=discord.Color.red())
 split_msg1 = "Do you want to split?\n!split - Split.\n!continue - Continue without split\n"
 split_msg = discord.Embed(title='',description=split_msg1,color=discord.Color.red())
