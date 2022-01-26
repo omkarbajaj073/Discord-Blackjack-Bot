@@ -24,7 +24,7 @@ help_msg1 = '''**Commands**
 11. According to the final sum of the cards, the winner is decided.'''
 
 help_msg = discord.Embed(title='',description=help_msg1,color=discord.Color.red())
-split_msg1 = "Do you want to split?\n!split - Split.\n!continue - Continue without split\n"
+split_msg1 = "**Do you want to split?**\n!split - Split.\n!continue - Continue without split\n"
 split_msg = discord.Embed(title='',description=split_msg1,color=discord.Color.red())
 card_values = {"A": 11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8,
                 "9":9, "10":10, "J":10, "Q":10, "K":10}
