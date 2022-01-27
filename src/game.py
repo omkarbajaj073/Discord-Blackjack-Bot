@@ -133,7 +133,7 @@ class Game:
                 self.active_hands -= 1
                 
                 if self.active_hands == 0:
-                    await self.stay()
+                    await self.stand()
                     await self.reset_game()
                     return
                     
@@ -149,7 +149,7 @@ class Game:
             await self.channel.send("Play for Hand" + str(self.cur))
     
 
-    async def stay(self):
+    async def stand(self):
         
         self.change = 0
         self.active_hands -= 1

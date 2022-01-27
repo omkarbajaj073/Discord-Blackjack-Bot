@@ -47,8 +47,8 @@ async def hit(game):
     await game.hit(game.cur)
 
 @commands
-async def stay(game):
-    await game.stay()
+async def stand(game):
+    await game.stand()
     
 @commands
 async def surrender(game):
@@ -96,8 +96,8 @@ async def on_message(message):
     elif content == "!hit":
         await hit(name, channel)
             
-    elif content == "!stay":    
-        await stay(name, channel)
+    elif content == "!stand":    
+        await stand(name, channel)
 
     elif content == "!surrender":
         await surrender(name, channel)

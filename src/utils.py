@@ -1,10 +1,10 @@
 import discord
-play_msg1 = "!hit - Hit me. Ask for another card.\n!stay - Stay.\n!surrender - Surrender."
+play_msg1 = "!hit - Hit me. Ask for another card.\n!stand - stand.\n!surrender - Surrender."
 play_msg = discord.Embed(title='',description=play_msg1,color=discord.Color.red()) 
 help_msg1 = '''**Commands**
 !bj: Starts a new game with the player.
 !hit: draw a card
-!stay: dealer draws cards
+!stand: dealer draws cards
 !split: you gets two hands and play seperately for each hand
 !continue: in case you do not want to split
 !surrender: give up the match
@@ -15,7 +15,7 @@ help_msg1 = '''**Commands**
 2. The dealer deals a card to himself visible to everyone. 
 3. Another card is given to the player facing upwards.
 4. The dealer deals a card facing downwards for himself.
-5. The player has to decide whether to hit, stay, split (certain cases) or surrender
+5. The player has to decide whether to hit, stand, split (certain cases) or surrender
 6. If the player decides to hit, another card is dealt.
 7. If the player decides to stand, then the dealer reveals his hidden card.
 8. The dealer has the authority to decide whether to hit or stand.
