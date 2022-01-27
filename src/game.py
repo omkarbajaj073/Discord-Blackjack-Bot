@@ -1,10 +1,10 @@
 import discord
 import random
-from utils import play_msg, card_values, get_deck, check_aces, split_msg, default_bet
+from utils import play_msg, card_values, get_deck, check_aces, split_msg
 
 class Game:
     
-    def __init__(self, channel = None, user = None):
+    def __init__(self, channel = None, user = None, balance = 10000):
         self.channel = channel
         self.name = user
         self.active = False
@@ -18,12 +18,12 @@ class Game:
         self.active_hands = 1
         self.cur = None
         self.can_surrender = True
-        self.balance = 10000
+        self.balance = balance
         self.bet = 0
         self.change = 0
     
     
-    async def start_game(self, bet=default_bet):
+    async def start_game(self, bet):
         self.bet = bet
         self.active = True
         for i in range(2):
