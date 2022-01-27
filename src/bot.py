@@ -1,7 +1,7 @@
 import discord
 from game import Game
 from dotenv import load_dotenv
-from utils import default_bet, help_msg
+from utils import help_msg
 import os
 
 load_dotenv()
@@ -9,6 +9,7 @@ TOKEN = os.getenv('TOKEN')
 
 games = {}
 client = discord.Client()
+default_bet = 500
 
 
 def commands(func):
@@ -77,9 +78,13 @@ async def on_connect():
 
 @client.event
 async def on_message(message):
+    
+    global default_bet
+    
     content = message.content
     channel = message.channel
     name = message.author.name
+    
     if message.author == client.user:
         return   
     
@@ -110,6 +115,16 @@ async def on_message(message):
         
     elif content == "!balance":
         await balance(name, channel)
+        
+    elif content.startswith("!set bet"):
+        try:
+            if len(content.split()) > 3:
+                await channel.send("You entered too many values. Please enter only one value.")
+            else:
+                default_bet = int(content.split()[2])
+                await channel.send(f"Default bet set to {default_bet}")
+        except:
+            await channel.send("Please enter a valid value to reset the default bet.")
         
     elif content == "!help":
         await channel.send(embed=help_msg)
