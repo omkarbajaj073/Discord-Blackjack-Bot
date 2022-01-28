@@ -17,7 +17,7 @@ class Game:
         self.can_split: bool = True
         self.active_hands: int = 1
         self.cur: int = None
-        self.can_surrender: bool = True
+        self.first_move: bool = True
         self.balance: int = balance
         self.bet: int = 0
         self.change: int = 0
@@ -73,7 +73,7 @@ class Game:
         
         
     async def split(self):
-        self.can_surrender = False
+        self.first_move = False
         
         if self.can_split and len(self.playerhand) == 2:
             self.has_split = True
@@ -114,7 +114,7 @@ class Game:
         
     async def hit(self, hand: int = None):
         
-        self.can_surrender = False
+        self.first_move = False
         card=random.choice(self.deck)
         self.deck.remove(card)
         
@@ -161,7 +161,7 @@ class Game:
         
         self.change = 0
         self.active_hands -= 1
-        self.can_surrender = False
+        self.first_move = False
         
         if self.active_hands <= 0:
         
@@ -226,7 +226,7 @@ class Game:
             
             
     async def surrender(self):
-        if self.can_surrender:
+        if self.first_move:
             await self.channel.send(f'**You surrendered {self.name}.**')
             await self.show_hands()
             self.change -= self.bet/2
@@ -305,7 +305,7 @@ class Game:
         self.active_hands = 1
         self.can_split = 0
         self.has_split = 0
-        self.can_surrender = True
+        self.first_move = True
         self.bet = 0
         self.change = 0
         self.cur = None

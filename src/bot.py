@@ -73,6 +73,17 @@ async def split(game: Game):
 async def cont(game: Game):
     await game.cont()
 
+@commands
+async def double(game: Game):
+    if game.first_move:
+        await game.channel.send("**Doubling the stake!**")
+        game.bet=game.bet*2
+        await game.hit()
+        if game.active:
+            await game.stay()
+    else:
+        await game.channel.send("**You can't use double at this stage in the game.**")
+        
 async def balance(name: str, channel: discord.channel):
     if name in games:
         game = games[name]
@@ -179,7 +190,10 @@ async def on_message(message: discord.Message):
 
     elif content == "!surrender":
         await surrender(name, channel)
-            
+        
+    elif content == "!double":
+        await double(name, channel)
+        
     elif content == "!split":
         await split(name, channel)
             

@@ -1,6 +1,6 @@
 import discord
 
-play_msg_text: str = "!hit - Hit me. Ask for another card.\n!stay - stay.\n!surrender - Surrender.\n!double - Double the stake"
+play_msg_text: str = "!hit - Hit me. Ask for another card.\n!stay - Stay.\n!surrender - Surrender.\n!double - Double the stake"
 play_msg: discord.Embed = discord.Embed(title='',description=play_msg_text,color=discord.Color.red()) 
 
 help_msg_text: str = "**!commands: **Displays list of all commands.\n**!rules: **Displays rules of blackjack."
@@ -10,7 +10,7 @@ commands_msg_text: str = '''**Commands**
 !bj <value>: Starts a new game with the player, putting the given amount on the stake. If no amount is entered the default stake amount is used (starts as 500 coins). If the player is playing for the first time, an account is created to store his/her balance (starts as 10,000 coins).
 !hit: Draw a card
 !stay: Dealer draws cards
-!double: Doubles the stake and deals one card. Dealers
+!double: Doubles the stake and deals one card. Then the dealer's hand is revealed.
 !split: You get two hands and play separately for each hand
 !continue: In case you do not want to split
 !surrender: Give up the match. Half the stake will be lost
