@@ -4,15 +4,19 @@ from dotenv import load_dotenv
 from utils import help_msg
 import os
 
-# get bot token from .env file
+'''
+To run the bot, go to www.discord.com/developers and create a new application.
+Copy the token and store it in a .env file.
+'''
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
 
+client = discord.Client()
+
+# server variables
 games: dict[str, Game] = {}
 default_bet: int = 500
 default_start_balance: int = 10000
-
-client = discord.Client()
 
 # decorator to wrap game functions
 def commands(func):
@@ -30,6 +34,7 @@ def commands(func):
 
 
 async def start_game(name: str, channel: discord.channel, bet: int = default_bet):
+    
     if name in games: # check if user already has a game
         game = games[name]
         if game.active:
@@ -37,10 +42,12 @@ async def start_game(name: str, channel: discord.channel, bet: int = default_bet
             return
         else: 
             game.channel = channel
+    
     else: # create new game is user does not have a game account
         game = Game(channel, name, default_start_balance)
         games[name] = game
         await channel.send("Creating BJ account - starting balance is 10000 coins.")
+    
     if game.balance < bet:
         await channel.send(f"Sorry, you don't have enough money to bet {bet} coins")
     else:
@@ -75,12 +82,14 @@ async def balance(name: str, channel: discord.channel):
         
 async def set_option(content: str, channel: discord.channel):
     options = content.split()
+    
     if len(options) == 1:
         await channel.send("Please enter a valid option you want to reset.")
     elif len(options) == 2:
         await channel.send("Please enter a valid value to reset the option.")
     elif len(options) > 3:
         await channel.send("Please enter only one value to reset the option.")
+    
     else:        
         option = options[1]                
         reset = 0
@@ -94,22 +103,26 @@ async def set_option(content: str, channel: discord.channel):
             global default_bet
             default_bet = reset
             await channel.send(f"Default stake reset to {default_bet}")
+    
         elif option == "start-balance":
             global default_start_balance
             default_start_balance = reset
             await channel.send(f"Default starting balance reset to {default_start_balance}")
+    
         else:
             await channel.send("Please enter a valid option you want to reset.")  
             
 async def reset_acc(name: str, channel: discord.channel):
+    
     if name in games:
         game = games[name]
         if game.balance > 100:
             await channel.send(f"You have too much balance to reset your account {name}.")
             return
-        else:
-            game.balance = default_start_balance
-            await channel.send(f"Your account has been reset. You have {game.balance} coins.")
+        
+        game.balance = default_start_balance
+        await channel.send(f"Your account has been reset. You have {game.balance} coins.")
+    
     else:
         await channel.send("You don't have an account to reset.\n!help to find out how to use this bot.")  
 
@@ -132,6 +145,7 @@ async def on_message(message: discord.Message):
     if content.startswith("!bj"):
         await channel.send(f"Starting blackjack with {name}.")
         com = content.split()
+    
         if len(com) > 2:
             await channel.send("Please enter only one value for the stake.")
         if len(com) == 2:

@@ -45,7 +45,7 @@ def get_deck() -> list[str]:
     return deck
 
 
-def check_aces(hand: list[str], sm: int) -> tuple[list[int], int]:
+def check_aces(hand: list[str], sm: int) -> tuple[list[str], int]:
     for i in hand:
         if i[1:]=='A':
             sm-=10
