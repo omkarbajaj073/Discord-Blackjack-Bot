@@ -51,7 +51,6 @@ class Game:
         
         if self.playersum==21:
             await self.show_hands()
-            await self.channel.send('You won! Blackjack')
             await self.channel.send('**You won! Blackjack**')
             self.change += self.bet*3/2
             await self.reset_game()
