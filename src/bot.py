@@ -112,6 +112,22 @@ async def set_option(content: str, channel: discord.channel):
         else:
             await channel.send("Please enter a valid option you want to reset.")  
             
+async def view(content: str, channel: discord.channel):
+    opt = content.split()
+    
+    if len(opt) == 1:
+        await channel.send("Please enter which default you want to view.")
+    elif len(opt) > 2:
+        await channel.send("Please enter only one option to view.")
+    
+    else:
+        if opt[1] == "stake":
+            await channel.send(f"Default stake - {default_bet}") 
+        elif opt[2] == "start-balance":
+            await channel.send(f"Default starting balance - {default_start_balance}")
+        else:
+            await channel.send("Please enter a valid option to view.")
+
 async def reset_acc(name: str, channel: discord.channel):
     
     if name in games:
@@ -175,6 +191,9 @@ async def on_message(message: discord.Message):
         
     elif content.startswith("!set"):
         await set_option(content, channel)
+        
+    elif content.startswith("!view"):
+        await view(content, channel)
         
     elif content == "!reset":
         await reset_acc(name, channel)

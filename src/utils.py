@@ -12,23 +12,25 @@ help_msg_text = '''**Commands**
 !surrender: give up the match
 !help: to see rules and commands
 !balance: see your game balance
-!set <option> <value>: set the default stake (!set bet <value>) or default starting balance (!set start-balance <value>)
-!reset: reset your account to the default starting balance. 
+!set <option> <value>: set the default stake (!set stake <value>) or default starting balance (!set start-balance <value>)
+!view <option> : view the default stake or default starting balance
+!reset: reset your account to the default starting balance
 Note - this is only valid if you have less than 100 coins
 
 **Rules**
-1. A card is dealt to the player facing upwards (visible to everyone).
-2. The dealer deals a card to himself visible to everyone. 
-3. Another card is given to the player facing upwards.
-4. The dealer deals a card facing downwards for himself.
-5. The player has to decide whether to hit, stay, split (certain cases) or surrender
+1. The bot deals the dealer and the player a hand of 2 cards. Only the first of the dealer's cards is visible initially.
+5. The player can either hit, stay, split (if applicable) or surrender.
 6. If the player decides to hit, another card is dealt.
 7. If the player decides to stay, then the dealer reveals his hidden card.
-8. The dealer has the authority to decide whether to hit or stay.
-9. The player has an option to use split, given that he has two cards of same value in the hand
+9. The player has an option to use split, given that he has two cards of same value in the hand.
 10. If the player decides to split, he gets two hands and plays for these hands seperately.
+11. If the player doesn't want to split, he/she can use the !continue command.
 11. According to the final sum of the cards, the winner is decided.
-12. Default bet is 500 coins.
+12. The sum is calculated with the following rules - 
+a. Number cards go by their face value.
+b. Picture cards have a value of 10. 
+c. Aces can have a value of 11, or 1 (if the sum would be greater than 21 if taken as 11).
+13. If the score of a hand is greater than 21, it loses. Otherwise, the higher score wins.
 '''
 help_msg: discord.Embed = discord.Embed(title='',description=help_msg_text,color=discord.Color.red())
 
@@ -54,5 +56,3 @@ def check_aces(hand: list[str], sm: int) -> tuple[list[str], int]:
         if sm <= 21:
             break
     return hand, sm
-
-      

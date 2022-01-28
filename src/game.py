@@ -295,7 +295,7 @@ class Game:
         else:
             await self.channel.send(f"You won {self.change} coins")
         
-        await self.channel.send("Your current balance is " + str(self.balance))
+        await self.channel.send(f"Your current balance is {self.balance}.")
         self.dealerhand.clear()
         self.dealersum = 0
         self.playerhand = []
