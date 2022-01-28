@@ -4,38 +4,40 @@ from dotenv import load_dotenv
 from utils import help_msg
 import os
 
+# get bot token from .env file
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
 
-games = {}
+games: dict[str, Game] = {}
+default_bet: int = 500
+default_start_balance: int = 10000
+
 client = discord.Client()
-default_bet = 500
-default_start_balance = 10000
 
-
+# decorator to wrap game functions
 def commands(func):
-    async def wrapper(name, channel):
+    async def wrapper(name: str, channel: discord.channel):
         if name in games:
             game = games[name]
             if game.active:
                 await func(game)
             else:
-                await channel.send("You don't have an active game " + name)
+                await channel.send(f"You don't have an active game {name}.")
         else:
-            await channel.send("You don't have an active game " + name)
+            await channel.send(f"You don't have an active game {name}")
             
     return wrapper
 
 
-async def start_game(name, channel, bet=default_bet):
-    if name in games:
+async def start_game(name: str, channel: discord.channel, bet: int = default_bet):
+    if name in games: # check if user already has a game
         game = games[name]
         if game.active:
             await channel.send("You already have an active game " + name)
             return
-        else:
+        else: 
             game.channel = channel
-    else:
+    else: # create new game is user does not have a game account
         game = Game(channel, name, default_start_balance)
         games[name] = game
         await channel.send("Creating BJ account - starting balance is 10000 coins.")
@@ -45,33 +47,33 @@ async def start_game(name, channel, bet=default_bet):
         await game.start_game(bet)  
 
 @commands
-async def hit(game):
+async def hit(game: Game):
     await game.hit(game.cur)
 
 @commands
-async def stay(game):
+async def stay(game: Game):
     await game.stay()
     
 @commands
-async def surrender(game):
+async def surrender(game: Game):
     await game.surrender()
     
 @commands
-async def split(game):
+async def split(game: Game):
     await game.split()
     
 @commands
-async def cont(game):
+async def cont(game: Game):
     await game.cont()
 
-async def balance(name, channel):
+async def balance(name: str, channel: discord.channel):
     if name in games:
         game = games[name]
         await channel.send(f"{name} has a balance of {game.balance}")
     else:
         await channel.send(f"{name} has never played a game on this server.")
         
-async def set_option(content, channel):
+async def set_option(content: str, channel: discord.channel):
     options = content.split()
     if len(options) == 1:
         await channel.send("Please enter a valid option you want to reset.")
@@ -81,17 +83,25 @@ async def set_option(content, channel):
         await channel.send("Please enter only one value to reset the option.")
     else:        
         option = options[1]                
-        reset = options[2]
+        reset = 0
+        try:
+            reset = int(options[2])
+        except:
+            await channel.send("Please enter a valid value to reset the option.")
+            return
+        
         if option == "stake": 
+            global default_bet
             default_bet = reset
             await channel.send(f"Default stake reset to {default_bet}")
         elif option == "start-balance":
+            global default_start_balance
             default_start_balance = reset
             await channel.send(f"Default starting balance reset to {default_start_balance}")
         else:
             await channel.send("Please enter a valid option you want to reset.")  
             
-async def reset_acc(name, channel):
+async def reset_acc(name: str, channel: discord.channel):
     if name in games:
         game = games[name]
         if game.balance > 100:
@@ -110,14 +120,11 @@ async def on_connect():
     
 
 @client.event
-async def on_message(message):
+async def on_message(message: discord.Message):
     
-    global default_bet
-    global default_start_balance
-    
-    content = message.content
-    channel = message.channel
-    name = message.author.name
+    content: str = message.content
+    channel: discord.channel = message.channel
+    name: str = message.author.name
     
     if message.author == client.user:
         return   
@@ -125,6 +132,8 @@ async def on_message(message):
     if content.startswith("!bj"):
         await channel.send(f"Starting blackjack with {name}.")
         com = content.split()
+        if len(com) > 2:
+            await channel.send("Please enter only one value for the stake.")
         if len(com) == 2:
             bet = int(com[1])
         else:
@@ -156,10 +165,8 @@ async def on_message(message):
     elif content == "!reset":
         await reset_acc(name, channel)
           
-            
     elif content == "!help":
         await channel.send(embed=help_msg)
-        
             
 
 client.run(TOKEN)
