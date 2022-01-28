@@ -230,7 +230,7 @@ class Game:
         if self.can_surrender:
             await self.channel.send(f'**You surrendered {self.name}.**')
             await self.show_hands()
-            self.change -= self.bet
+            self.change -= self.bet/2
             await self.reset_game()
         else:
             await self.channel.send("**You can't surrender at this stage in the game.**")
