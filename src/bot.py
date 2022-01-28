@@ -1,12 +1,15 @@
 import discord
 from game import Game
+from dotenv import load_dotenv
+import os
 
 
 games = {}
 
 
+load_dotenv()
 client = discord.Client()
-TOKEN = "OTEwMTkxOTY4NDMxMjQ3NDQw.YZPQUw.8lobqubSVdeeVL9OCWeL5BhKjfE"
+TOKEN = os.getenv('TOKEN')
 
 @client.event
 async def on_connect():
