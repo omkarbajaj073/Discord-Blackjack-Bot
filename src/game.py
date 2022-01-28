@@ -308,3 +308,4 @@ class Game:
         self.can_surrender = True
         self.bet = 0
         self.change = 0
+        self.cur = None
