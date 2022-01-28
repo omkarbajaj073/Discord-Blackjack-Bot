@@ -1,7 +1,7 @@
 import discord
 from game import Game
 from dotenv import load_dotenv
-from utils import help_msg
+from utils import help_msg, commands_msg, rules_msg
 import os
 
 '''
@@ -14,7 +14,7 @@ TOKEN = os.getenv('TOKEN')
 client = discord.Client()
 
 # server variables
-games: dict[str, Game] = {}
+games: dict = {}
 default_bet: int = 500
 default_start_balance: int = 10000
 
@@ -200,6 +200,11 @@ async def on_message(message: discord.Message):
           
     elif content == "!help":
         await channel.send(embed=help_msg)
-            
+        
+    elif content == '!commands':
+        await channel.send(embed=commands_msg)
+    
+    elif content == '!rules':
+        await channel.send(embed=rules_msg)            
 
 client.run(TOKEN)

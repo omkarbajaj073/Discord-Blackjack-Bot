@@ -8,11 +8,11 @@ class Game:
         self.channel: discord.channel = channel
         self.name: str = name
         self.active: bool = False
-        self.dealerhand: list[str] = []
+        self.dealerhand: list = []
         self.dealersum: int = 0
-        self.playerhand: dict[int, list[str]] = []
-        self.playersum: dict[int, int] = 0
-        self.deck: list[str] = get_deck()
+        self.playerhand: dict = []
+        self.playersum: dict = 0
+        self.deck: list = get_deck()
         self.has_split: bool = False
         self.can_split: bool = True
         self.active_hands: int = 1
@@ -271,7 +271,7 @@ class Game:
         await self.channel.send(embed=embed)
         
     
-    def check_aces_player(self, hand: list[str]=None):
+    def check_aces_player(self, hand: list = None):
         if hand is None:
             self.playerhand, self.playersum = check_aces(self.playerhand, self.playersum)
         else:
