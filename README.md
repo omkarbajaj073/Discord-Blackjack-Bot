@@ -9,7 +9,7 @@
 - Run the bot script `bot.py`.
 
 ## Bot Commands
-- !bj <value>: Starts a new game with the player, putting the given amount on the stake. If no amount is entered the default stake amount is used (starts as 500 coins). If the player is playing for the first time, an account is created to store his/her balance (starts as 10,000 coins).
+- `!bj <value>`: Starts a new game with the player, putting the given amount on the stake. If no amount is entered the default stake amount is used (starts as 500 coins). If the player is playing for the first time, an account is created to store his/her balance (starts as 10,000 coins).
 - `!hit`: Draw a card
 - `!stay`: Dealer draws cards
 - `!double`: Doubles the stake and deals one card. Then the dealer's hand is revealed.
