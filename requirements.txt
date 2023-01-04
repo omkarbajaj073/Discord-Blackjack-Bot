@@ -1,4 +1,0 @@
-Python modules:
-- discord.py
-
-Add your Discord Bot Token to a .env file
